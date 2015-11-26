@@ -1,0 +1,57 @@
+body {
+  background-color: #EEE;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #0CF;
+  height: 30px;
+}
+
+aside {
+  background-color: #FFF;
+  margin: 15px;
+  margin-top: 0;
+  width: 350px;
+  float: left;
+}
+
+.fixclear::after {
+  content: " ";
+  display: block;
+  float:none;
+  clear: both;
+}
+
+article {
+  background-color: #FFF;
+  margin: 15px;
+  margin-left: 380px; /*350 + 15 + 15*/
+
+}
+
+footer {
+  height: 100px;
+  background-color: #FC0;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  aside {
+    float: none;
+    width: auto;
+    margin-top: 15px;
+  }
+
+  article {
+    margin-left: 15px;
+  }
+}
