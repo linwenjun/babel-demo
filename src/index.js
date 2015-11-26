@@ -1,3 +1,4 @@
+var Car = require('./Car');
 var foo = 1;
 let bar = 1;
 
@@ -12,3 +13,6 @@ var obj = {
     })
   }
 }
+
+var theCar = new Car("red");
+console.log(theCar.getColor());

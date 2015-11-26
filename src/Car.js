@@ -1,4 +1,4 @@
-class car {
+class Car {
   constructor(color) {
     this.color = color;
   }
@@ -15,3 +15,5 @@ class car {
     return new Car('yellow');
   }
 }
+
+module.exports = Car;
