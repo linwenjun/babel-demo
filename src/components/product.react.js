@@ -4,7 +4,9 @@ var ProductStore = require('../stores/product-store');
 
 function getProductState() {
   return {
-    selectedId: ProductStore.getSelectedId()
+    selectedId: ProductStore.getSelectedId(),
+    generators: ProductStore.getGenerators(),
+    loadingBar: ProductStore.getLoadingBar()
   }
 }
 
@@ -16,10 +18,12 @@ var Product = React.createClass({
 
   _onChange: function() {
     this.setState(getProductState());
+    // console.log(this.state.loadingBar);
   },
 
   setSelect: function(idx) {
     ProductActions.selectProduct(idx);
+    ProductActions.loadNews();
   },
 
   componentDidMount: function() {
@@ -31,6 +35,10 @@ var Product = React.createClass({
   },
 
   render: function() {
+    var liStyle = {
+      display: 'none'
+    }
+
     return (
       <div>
         <h1>Hello,world!</h1>
@@ -41,6 +49,14 @@ var Product = React.createClass({
             )
           })}
         </ul>
+        <ol>
+          {this.state.generators.map((item, idx) => {
+            return(<li key={idx}>{item}</li>)
+          })}
+
+          <li style={this.state.loadingBar ? {} : liStyle}>loading...</li>
+
+        </ol>
       </div>
     )
   }

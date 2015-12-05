@@ -5,9 +5,20 @@ var _ = require('underscore');
 
 var _products = [];
 var _selectedId = null;
+var _generators = [];
+var _loadingBar = false;
 
 function setSelectedId(id) {
   _selectedId = id;
+}
+
+function addGenerator(data) {
+  _generators.push(data);
+  _loadingBar = false;
+}
+
+function setLoadingBar(isShow) {
+  _loadingBar = isShow;
 }
 
 var ProductStore = _.extend({}, EventEmitter.prototype, {
@@ -18,6 +29,15 @@ var ProductStore = _.extend({}, EventEmitter.prototype, {
 
   getSelectedId: function() {
     return _selectedId;
+  },
+
+  getGenerators: function() {
+    return _generators;
+  },
+
+  getLoadingBar: function() {
+    console.log(1);
+    return _loadingBar;
   },
 
   emitChange: function() {
@@ -39,6 +59,14 @@ AppDispatcher.register(function(payload) {
   switch(action.actionType) {
     case ProductConstants.SET_SELECTED:
       setSelectedId(action.data);
+      break;
+
+    case ProductConstants.ADD_GENERATOR:
+      addGenerator(action.data);
+      break;
+
+    case ProductConstants.SET_LOADINGBAR:
+      setLoadingBar(action.data);
       break;
 
     default:
