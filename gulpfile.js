@@ -8,27 +8,45 @@ var es = require('event-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
+var watchify = require('watchify');
+var rename = require('gulp-rename');
+
 
 gulp.task('browserify', function(done) {
-  glob('src/app.js', function(err, files) {
-    if(err) done(err);
+  var entry = 'src/app.js';
 
-    var tasks = files.map(function(entry) {
-      return browserify({
-          entries: [entry],
-          debug: true
-        })
-        .transform('babelify', {presets: ['es2015', 'react']})
-        .bundle()
-        .pipe(source(entry))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./dist'));
-    })
-    es.merge(tasks).on('end', done);
-  })
+  var opts = {
+    entries: [entry],
+    debug: true,
+    plugin: [watchify],
+    delay: 100,
+    ignoreWatch: ['**/node_modules/**'],
+    poll: false
+  };
+
+  var b = browserify(opts).transform('babelify', {presets: ['es2015', 'react']})
+
+  b.on('update', bundle);
+
+  function bundle() {
+    var start = new Date().getTime();
+    console.log("Starting 'browserify'...");
+    return b.bundle()
+      .pipe(source(entry))
+      .pipe(buffer())
+      .pipe(rename(function(path) {
+        path.dirname = "";
+      }))
+      // .pipe(sourcemaps.init({loadMaps: true}))
+      // .pipe(uglify())
+      // .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./dist'))
+      .on('end', function() {
+        console.log("Finished 'browserify' after" + (new Date().getTime() - start) + 'ms');
+      })
+  }
+
+  bundle().on('end', done);
 })
 
 var connect = require('gulp-connect');
