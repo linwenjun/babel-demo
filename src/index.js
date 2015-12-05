@@ -1,18 +1,15 @@
-var Car = require('./Car');
-var foo = 1;
-let bar = 1;
+global.React = require('react');
+var ReactDOM = require('react-dom');
+var ProductData = require('./product-data');
+var CartApi = require('./utils/cart-api');
+// var TWAHeader = require('./components/twa-header');
+var FluxCartApp = require('./components/flux-cart-app.react');
 
-var baz = [1,2,3].filter(v => v > 2);
+ProductData.init();
 
-var obj = {
-  name: "tom",
-  friends: ["bob", "jerry"],
-  printFriends: function() {
-    this.friends.forEach(f => {
-      console.log(this.name + 'knows' + f);
-    })
-  }
-}
+CartApi.getProductData();
 
-var theCar = new Car("red");
-console.log(theCar.getColor());
+ReactDOM.render(
+  <FluxCartApp />,
+  document.getElementById('index-div')
+)
